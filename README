@@ -1,0 +1,23 @@
+                  Low  High
+                 +---------+
+Didn't Reoffend  |____|____|
+Reoffended       |    |    |
+                 +---------+
+
+
+This repository contains the code and plots used in the experiments section of the paper 
+"From Soft Classifiers to Hard Decisions: How fair can we be?" (https://arxiv.org/pdf/1810.02003.pdf)
+
+
+Summary of the CSV files:
+1. compas-scores-raw.csv: 28 X 60843
+2. compas-scores-two-years-violent: 54 X 4743
+3. compas-scores-two-years.csv: 53 X 7214
+4. compas-scores.csv: 47 X 11757
+
+
+
+Summary of the experiments performed:
+1. Using deferrals on a single group to equalize the PDFs of the DOCS - deferral_equalize_pdf.R
+2. Using deferrals on both groups via the min-PDF method to equalize the PDFs - deferral_min_pdf.R
+3. Using deferrals with thresholds to equalize PPV and NPV across African-Americans and Caucasians simultaneously - deferral_thresholds.R
