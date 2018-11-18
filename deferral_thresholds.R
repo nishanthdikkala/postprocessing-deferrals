@@ -1,12 +1,20 @@
-#
+####################################
+# Experiment on COMPAS data for Broward County
+# as used by ProPublica (https://github.com/propublica/compas-analysis)
+# Main paper: https://arxiv.org/pdf/1810.02003.pdf
+# Code demonstrating how one could equalize PPV and NPV across African-American and
+# Caucasian defendants by using two thresholds per group.
+####################################
 library(grid)
 library(gridExtra)
 library(dplyr)
 library(ggplot2)
 
-
+# hyperparameter for plots
 cex_factor = 1.7
 
+
+# Load and clean the data selecting for the desired fields
 raw_data <- read.csv("./compas-scores-two-years.csv")
 df <- dplyr::select(raw_data, age, c_charge_degree, race, age_cat, score_text, sex, priors_count,
                     days_b_screening_arrest, decile_score, is_recid, two_year_recid, c_jail_in, c_jail_out) %>%
@@ -20,6 +28,8 @@ df_blacks = filter(df,race=="African-American")
 df_whites = filter(df,race=="Caucasian")
 num_blacks = nrow(df_blacks)
 num_whites = nrow(df_whites)
+
+# Compute frequency distributions for COMPAS scores for both the groups
 black_score_freq = 1:10
 white_score_freq = 1:10
 black_score_pdf = 1:10
@@ -96,13 +106,8 @@ cat("White NPV: ", white_npv,"\n")
 
 (black_score_pdf[3]+black_score_pdf[4])
 print(white_score_pdf[5])
-# for plotting use abline(v = xintercept) for vertical lines
-# ## Create a vector of colors selected based on whether x is <0 or >0
-## (FALSE + 1 -> 1 -> "blue";    TRUE + 1 -> 2 -> "red")
-# cols <- c("blue", "red")[(x > 0) + 1]
-#
-# ## Pass the colors in to barplot()
-# barplot(x, col = cols)
+
+# Pick colors to be used in the barplots
 col1 = "lightblue1"#"darkturquoise"
 col2 = "dimgray"
 col3 = "salmon"

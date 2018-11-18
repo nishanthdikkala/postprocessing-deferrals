@@ -2,7 +2,7 @@
 # Experiment on COMPAS data for Broward County
 # as used by ProPublica (https://github.com/propublica/compas-analysis)
 # Main paper: https://arxiv.org/pdf/1810.02003.pdf
-# Code demonstrating how one could equalize the DOCS of African-American and
+# Code demonstrating how one could equalize the AP of African-American and
 # Caucasian defendants by deferring on one of the two groups.
 ####################################
 
@@ -15,7 +15,6 @@ library(ggplot2)
 cex_factor = 1.6
 
 # Load and clean the data selecting for the desired fields
-
 raw_data <- read.csv("./compas-scores-two-years.csv")
 df <- dplyr::select(raw_data, age, c_charge_degree, race, age_cat, score_text, sex, priors_count,
                     days_b_screening_arrest, decile_score, is_recid, two_year_recid, c_jail_in, c_jail_out) %>%
@@ -43,7 +42,7 @@ for (i in seq(1,10,by=1)){
 }
 
 
-# Defer on African-Americans so as to convert their DOCS into that of Caucasians
+# Defer on African-Americans so as to convert their AP into that of Caucasians
 ratio_pdfs = black_score_pdf/white_score_pdf
 delta = 1 - min(ratio_pdfs)
 q_blacks = 1 - (1-delta)/ratio_pdfs
@@ -51,7 +50,7 @@ black_deferrals = black_score_freq*q_blacks
 black_deferrals_frac = black_score_pdf*q_blacks
 black_nondeferrals_frac = black_score_pdf*(1-q_blacks)
 
-# Defer on Caucasians so as to convert their DOCS into that of African-Americans
+# Defer on Caucasians so as to convert their AP into that of African-Americans
 ratio_pdfs = white_score_pdf/black_score_pdf
 delta = 1 - min(ratio_pdfs)
 q_whites = 1 - (1-delta)/ratio_pdfs
@@ -66,10 +65,10 @@ col_white = "orange2"
 col_white_deferral = "moccasin"
 
 # Generate barplot to display the deferrals of African-Americans to convert
-# their DOCS into that of Caucasians
+# their AP into that of Caucasians
 dat1 = rbind(black_nondeferrals_frac,black_deferrals_frac)
 pdf('black_to_white.pdf')
-barplot(dat1, beside=F,main=paste("Converting African-American DOCS \ninto Caucasian DOCS.",
+barplot(dat1, beside=F,main=paste("Converting African-American AP \ninto Caucasian AP.",
                                     "Deferral rate = 60%"),xlab="Decile Score", ylab="",
         ylim=c(0,0.15), names.arg=1:10, space=c(0.5,0.5),
         col=c(col_black,col_black_deferral),
@@ -93,10 +92,10 @@ cat("Fraction of black deferrals: ", total_black_deferrals/num_blacks,"\n")
 
 
 # Generate barplot to display the deferrals of Caucasians to convert
-# their DOCS into that of African-Americans
+# their AP into that of African-Americans
 dat2 = rbind(white_nondeferrals_frac,white_deferrals_frac)
 pdf('white_to_black.pdf')
-barplot(dat2, beside=F,main=paste("Converting Caucasian DOCS into \nAfrican-American DOCS.",
+barplot(dat2, beside=F,main=paste("Converting Caucasian AP into \nAfrican-American AP.",
                                     "Deferral rate = 67%"),xlab="Decile Score",
         ylab="", ylim=c(0,0.3), names.arg=1:10, space=c(0.5,0.5),
         col=c(col_white,col_white_deferral),
